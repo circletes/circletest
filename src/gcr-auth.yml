@@ -14,12 +14,12 @@ parameters:
       via the gcloud CLI
   google-compute-zone:
     type: env_var_name
-    default: GOOGLE_COMPUTE_ZONE
+    default: europe-west3-c
     description: >
       The Google compute zone to connect with via the gcloud CLI
   google-compute-region:
     type: env_var_name
-    default: GOOGLE_COMPUTE_REGION
+    default: europe-west3
     description: >
       The Google compute region to connect with via the gcloud CLI
 steps:
