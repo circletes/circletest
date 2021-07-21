@@ -3,8 +3,9 @@ jobs:
     executor: gcp-gcr/default
     steps:
       - checkout
-      - run: docker build .
-      - gcp-gcr/gcr-auth
+      #- run: docker build .
+      - gcp-gcr/gcr-auth:
+        context: "gcp"
       - gcp-gcr/push-image:
           digest-path: /tmp/digest.txt
           image: orb-test
