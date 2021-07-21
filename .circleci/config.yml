@@ -1,12 +1,21 @@
-version: 2
 jobs:
- build:
-   machine: true
-   steps:
-     - checkout
-
-     # build the application image
-     - run: docker build -t simple:$CIRCLE_BRANCH .
-
-     # deploy the image
-     #- run: docker push company/app:$CIRCLE_BRANCH
+  build-and-push:
+    executor: gcp-gcr/default
+    steps:
+      - checkout
+      - gcp-gcr/gcr-auth
+      - run: docker build .
+      - gcp-gcr/push-image:
+          digest-path: /tmp/digest.txt
+          image: orb-test
+          registry-url: eu.gcr.io
+      - run:
+          command: |
+            echo "Digest is: $(</tmp/digest.txt)"
+orbs:
+  gcp-gcr: circleci/gcp-gcr@x.y.z
+version: 2.1
+workflows:
+  commit:
+    jobs:
+      - build-and-push

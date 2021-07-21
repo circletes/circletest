@@ -1,0 +1,40 @@
+description: Push a container image to the GCR registry
+
+parameters:
+  registry-url:
+    description: The GCR registry URL from ['', us, eu, asia].gcr.io
+    type: string
+    default: eu.gcr.io
+
+  google-project-id:
+    description: The Google project ID to connect with via the gcloud CLI
+    type: env_var_name
+    default: GOOGLE_PROJECT_ID
+
+  image:
+    description: A name for your docker image
+    type: string
+
+  tag:
+    description: Comma-separated list of docker image tags
+    type: string
+    default: "latest"
+
+  digest-path:
+    type: string
+    description: (Optional) The path to save the RepoDigest of the pushed image
+    default: ""
+
+steps:
+  - run:
+      name: Push image to GCR
+      command: |
+        IFS="," read -ra DOCKER_TAGS \<<< "<< parameters.tag >>"
+        for tag in "${DOCKER_TAGS[@]}"; do
+          docker push <<parameters.registry-url>>/$<<parameters.google-project-id>>/<<parameters.image>>:${tag}
+        done
+
+        if [ -n "<<parameters.digest-path>>" ]; then
+          mkdir -p "$(dirname <<parameters.digest-path>>)"
+          docker image inspect --format="{{index .RepoDigests 0}}" <<parameters.registry-url>>/$<<parameters.google-project-id>>/<<parameters.image>>:${DOCKER_TAGS[0]} > "<<parameters.digest-path>>"
+        fi
