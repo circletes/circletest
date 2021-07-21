@@ -3,9 +3,8 @@ jobs:
     executor: gcp-gcr/default
     steps:
       - checkout
-      #- run: $GCLOUD_SERVICE_KEY >> /home/circleci/gcloud-service-key.json
-      - gcp-gcr/gcr-auth
       - run: docker build .
+      - gcp-gcr/gcr-auth
       - gcp-gcr/push-image:
           digest-path: /tmp/digest.txt
           image: orb-test
