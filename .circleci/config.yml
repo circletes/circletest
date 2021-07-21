@@ -8,7 +8,7 @@ jobs:
         context: "gcp"
       - gcp-gcr/push-image:
           digest-path: /tmp/digest.txt
-          image: orb-test
+          image: circletes
           registry-url: eu.gcr.io
       - run:
           command: |
