@@ -6,6 +6,7 @@ jobs:
       - run: docker build .
       - gcp-gcr/gcr-auth:
         context: "gcp"
+        context: "gcp-creds"
       - gcp-gcr/push-image:
           digest-path: /tmp/digest.txt
           image: orb-test
